@@ -16,17 +16,7 @@ class BiomesApp extends StatelessWidget {
     return MaterialApp(
       title: 'Biomes',
       theme: ThemeData(brightness: Brightness.dark),
-      home: LayoutBuilder(builder: (context, constraints) {
-        if (constraints.biggest.aspectRatio < 1) {
-          return const Scaffold(
-            body: Center(
-              child: Text('Please use a device with a landscape orientation'),
-            ),
-          );
-        }
-
-        return const BiomesPage();
-      }),
+      home: const BiomesPage(),
     );
   }
 }
@@ -82,7 +72,10 @@ class _BiomesPageState extends State<BiomesPage> {
             ),
           ),
           Expanded(
-            child: Row(
+            child: Flex(
+              direction: MediaQuery.of(context).size.aspectRatio > 1
+                  ? Axis.horizontal
+                  : Axis.vertical,
               children: [
                 if (worldmap != null)
                   Expanded(
