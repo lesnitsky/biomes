@@ -63,17 +63,23 @@ class _BiomesPageState extends State<BiomesPage> {
     return Scaffold(
       body: Column(
         children: [
-          Row(
-            children: [
-              ElevatedButton(
-                onPressed: generateMap,
-                child: const Text('Generate map'),
-              ),
-              ElevatedButton(
-                onPressed: scanBiomes,
-                child: const Text('Scan biomes'),
-              ),
-            ],
+          Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Row(
+              children: [
+                ElevatedButton(
+                  onPressed: generateMap,
+                  child: const Text('Generate map'),
+                ),
+                if (worldmap != null) ...[
+                  const SizedBox(width: 16),
+                  ElevatedButton(
+                    onPressed: scanBiomes,
+                    child: const Text('Scan biomes'),
+                  ),
+                ]
+              ],
+            ),
           ),
           Expanded(
             child: Row(
@@ -233,20 +239,34 @@ class BiomesList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      itemCount: biomes.length,
-      itemBuilder: (context, index) {
-        final biome = biomes[index];
-        final (x, y) = biome.first;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Text(
+            'Click to select a biome',
+            style: Theme.of(context).textTheme.titleSmall,
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: biomes.length,
+            itemBuilder: (context, index) {
+              final biome = biomes[index];
+              final (x, y) = biome.first;
 
-        return ListTile(
-          selected: index == selectedIndex,
-          title: Text('Biome ${biomeSymbols[worldmap[x][y]]}'),
-          onTap: () {
-            onBiomeSelected(index);
-          },
-        );
-      },
+              return ListTile(
+                selected: index == selectedIndex,
+                title: Text('Biome ${biomeSymbols[worldmap[x][y]]}'),
+                onTap: () {
+                  onBiomeSelected(index);
+                },
+              );
+            },
+          ),
+        )
+      ],
     );
   }
 }
